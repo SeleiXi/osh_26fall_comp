@@ -1,0 +1,19 @@
+A memory reference trace is simply a list of page numbers in the order that they are referenced. Because memory addresses are most commonly expressed in hexadecimal (base 16), the traces are lists of hexadecimal numbers. Because OOT does not appear to support hexadecimal numbers and all you need to do is compare two numbers for equality, you may treat them as strings. Alternatively, you can use the function strintok to convert the hexadecimal number as you read them in to integers.
+
+
+REALLY NEW: Because it takes too long for some of you to run your programs on the first four big traces (qsort, lu, mm32, mm16), you are not required to hand in results for these traces. If you already have results, please hand them in. If not, please spend your remaining time working on the report instead of running the experiments.
+
+
+
+
+IMPORTANT: Do not print out the traces. Some of these files are pretty big and printing them will waste a lot of paper for no reason. One suggestion was to write the main program such that it prompts for the memory size and the name of the trace file. Then the main program can open the trace file and read from it. Do not hand in printouts of the trace files. The trace files that you create to test your program will be much smaller, and you should hand in the traces you create annotated to explain what you expect the trace to show.
+
+
+Sorting: qsort
+This trace is from running a program that uses the quicksort function in the Unix library. This trace has 524 page references, and 192 unique page numbers.
+LU Decomposition: lu
+The program used to generate this trace is an LU decomposition algorithm that was designed to run on a parallel processor. This trace has 41832 references, and 531 unique page numbers.
+Matrix Multiply: mm32, mm16
+Two traces of matrix multiply were generated. The first trace used 32x32 matrices. It has 67235 references to 1667 unique pages. The second trace used 16x16 matrices. It has 9075 references to 515 unique pages.
+
+
