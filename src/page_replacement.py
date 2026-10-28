@@ -5,7 +5,8 @@ import heapq
 import sys
 from collections import OrderedDict, deque
 from pathlib import Path
-from wfm_experiment import wfm
+from wfm_experiment import wfm, wfm512
+from adaptive import adaptive
 
 FRAMES = (5, 10, 20, 50, 100)
 
@@ -122,7 +123,7 @@ def recency_frequency(pages, capacity, window=200):
 
 
 ALGORITHMS = {'FIFO': fifo, 'OPT': opt, 'LRU': lru,
-              'SecondChance': second_chance, 'WindowFreq': recency_frequency, 'WFM': wfm}
+              'SecondChance': second_chance, 'WindowFreq': recency_frequency, 'WFM': wfm, 'WFM-512': wfm512, 'Adaptive': adaptive}
 
 
 def main():

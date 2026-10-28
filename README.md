@@ -1,18 +1,18 @@
 # 页面替换算法实验
 
-使用 Python 3（无第三方依赖）模拟 demand paging，比较 FIFO、OPT/MIN、LRU、Second Chance、自设 WindowFreq 和 WFM。只在访问缺页时装入页面，不预取。OPT 利用未来访问序列作为离线理论下界，不能作为现场在线替换策略。
+使用 Python 3（无第三方依赖）模拟 demand paging，比较 FIFO、OPT/MIN、LRU、Second Chance、自设 WindowFreq、WFM、WFM-512 和 Adaptive。只在访问缺页时装入页面，不预取。OPT 利用未来访问序列作为离线理论下界，不能作为现场在线替换策略。
 
 ## 现场运行
 
 ```powershell
-python page_replacement.py "现场给的文件.txt"
+python src/page_replacement.py "现场给的文件.txt"
 ```
 
 每行一个页号，按字符串区分（区分大小写；十六进制页号不需要转换）；行首尾空格和空行被忽略，其他多个字段报错。输入需为 UTF-8（可带 BOM）。程序输出每种算法在 5、10、20、50、100 个页框下的缺页次数及五个次数的算术平均值；初始页框为空，首次访问也计缺页。
 
 ```powershell
-python page_replacement.py data/mm32.txt --window 200 --csv results/example.csv
-python -m unittest -v
+python src/page_replacement.py data/mm32.txt --window 200 --csv results/example.csv
+python -m unittest discover -s tests -v
 ```
 
 如果系统使用 `py` 启动 Python，可把上述命令中的 `python` 换成 `py`。窗口为正整数，默认 200。CSV 包含相同的数据。
@@ -25,21 +25,26 @@ python -m unittest -v
 
 `data/` 包含题目提供的四个 trace（`sort1.txt` 对应课件中的 qsort）及原始数据说明。`results/` 中各数据集 CSV 为默认窗口 200 下的完整结果，`window_sweep.csv` 为窗口 20、50、100、200、500 的参数实验。下表为五种页框数缺页次数的平均值（越低越好）。**粗体**标出各数据集的最优在线算法；OPT 使用未来信息，其离线理论下界也以粗体标出。
 
-| 数据集 | FIFO | OPT（离线下界） | LRU | Second Chance | WindowFreq (W=200) | WFM |
-|---|---:|---:|---:|---:|---:|---:|
-| sort1 | 396.0 | **302.0** | 394.0 | 394.8 | 367.2 | **363.0** |
-| lu | 37086.6 | **25293.8** | 36093.6 | 36143.0 | 30636.8 | **28536.8** |
-| mm16 | 6978.4 | **4188.2** | 6630.6 | 6642.4 | 5326.2 | **4738.8** |
-| mm32 | 57052.4 | **35455.2** | 54633.8 | 54703.4 | 40838.4 | **38939.8** |
+| 数据集 | FIFO | OPT（离线下界） | LRU | Second Chance | WindowFreq | WFM | WFM-512 | Adaptive |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| sort1 | 396.0 | **302.0** | 394.0 | 394.8 | 367.2 | 363.0 | 321.8 | **321.6** |
+| lu | 37086.6 | **25293.8** | 36093.6 | 36143.0 | 30636.8 | 28536.8 | 30254.2 | **28465.4** |
+| mm16 | 6978.4 | **4188.2** | 6630.6 | 6642.4 | 5326.2 | 4738.8 | 4673.2 | **4511.0** |
+| mm32 | 57052.4 | **35455.2** | 54633.8 | 54703.4 | 40838.4 | 38939.8 | 39063.2 | **37848.6** |
 
 在这四条 trace 上，WindowFreq 的平均缺页次数均低于所比较的在线基线，但 OPT 仍更低。对于 mm32，W=20 的平均值为 54633.8，W=200 降至 40838.4，W=500 回升至 41064.8；窗口大小影响性能。默认值 200 是根据给定数据观察选定的，不能保证对现场未知 trace 最优。单个页框数下也不保证优于所有基线，完整数字见 CSV。
 
 ## WFM 算法
 
-WFM 的窗口长度随页框数 F 调整为 max(64, 4F)，淘汰窗口中频率最低的驻留页；频率相同时淘汰最近使用的页。统计窗口在处理当前访问之前计算，包含窗口内所有页面的访问，不限于驻留页。`results/wfm.csv` 记录各页框数结果，可用 `python generate_wfm_results.py` 重现；主程序也会输出 WFM。
+WFM 的窗口长度随页框数 F 调整为 max(64, 4F)，淘汰窗口中频率最低的驻留页；频率相同时淘汰最近使用的页。统计窗口在处理当前访问之前计算，包含窗口内所有页面的访问，不限于驻留页。`results/wfm.csv` 记录各页框数结果，可用 `python src/generate_wfm_results.py` 重现；主程序也会输出 WFM。
 
 在 1 到 7 循环 100 次、5 个页框的例子中，WFM 缺页 285 次，LRU 缺页 700 次。这些结果同时改变了窗口长度和平局规则，因此不能单独归因于 MRU；WFM 在部分单个页框数下也会更差。
 
-## 提交规范
 
-采用 Conventional Commits，例如 `feat: add replacement algorithm`、`fix: correct page fault count`、`chore: update experiment data` 和 `docs: update results`。
+## 自适应在线策略
+
+Adaptive 维护四个影子策略：窗口为 512 的 WFM、原 WFM、LRU 和 MRU。每个影子策略只保存模拟驻留页与历史统计，统计最近 1024 次访问的缺页；只有另一策略比当前策略少超过 16 次缺页时才切换。真实页框缺页时，优先淘汰当前影子策略不持有的真实驻留页，若不存在则使用该策略的淘汰规则。真实页框只装入当前访问页面，不预取；所有统计和决策只依赖过去访问。影子缓存是额外元数据，内存和计算开销高于单一策略。
+
+在四个给定数据集、五种页框数共 20 个配置中，Adaptive 的缺页数 / OPT 的算术平均为 1.112（各配置等权），原 WFM 为 1.187。该值是 20 个比值的平均，与主表的缺页次数平均不同。参数由这些数据选择，不能视为未知现场数据的保证。`results/synthetic_validation.csv` 包含独立合成序列的验证结果；例如 21 页循环、20 页框时 Adaptive 为 387 次，OPT 为 369 次，但阶段变化和热点序列上仍有较大差距。
+
+探索记录见 `dse_results/`；实验实现位于 `src/experiments/`。

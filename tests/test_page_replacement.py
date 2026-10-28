@@ -1,9 +1,13 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 import tempfile
 import unittest
 from pathlib import Path
 from page_replacement import fifo, lru, opt, second_chance, recency_frequency, read_trace
 
-from wfm_experiment import wfm
+from wfm_experiment import wfm, wfm512
+from adaptive import adaptive
 
 class PagingTests(unittest.TestCase):
     def test_classic_trace(self):
@@ -19,12 +23,16 @@ class PagingTests(unittest.TestCase):
             p = [str(rng.randrange(7)) for _ in range(40)]
             for n in (1, 2, 3, 5):
                 bound = opt(p, n)
-                for algorithm in (fifo, lru, second_chance, recency_frequency):
+                for algorithm in (fifo, lru, second_chance, recency_frequency, wfm, wfm512, adaptive):
                     self.assertLessEqual(bound, algorithm(p, n))
     def test_wfm_cycle(self):
         p = list(map(str, range(1, 8))) * 100
         self.assertEqual(wfm(p, 5), 285)
         self.assertEqual(lru(p, 5), 700)
+    def test_adaptive_known_results(self):
+        p = list(map(str, range(1, 8))) * 100
+        self.assertGreaterEqual(adaptive(p, 5), opt(p, 5))
+        self.assertLess(adaptive(p, 5), lru(p, 5))
     def test_input(self):
         with tempfile.TemporaryDirectory() as d:
             p = Path(d) / 'trace.txt'

@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+
+dse_results/*.exe
+dse_results/outputs/*.txt
