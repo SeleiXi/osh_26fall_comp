@@ -8,7 +8,6 @@ from pathlib import Path
 from wfm_experiment import wfm, wfm512
 from adaptive import adaptive
 from lirs import lirs
-from memoryos_baseline import memoryos_heat
 
 FRAMES = (5, 10, 20, 50, 100)
 
@@ -125,7 +124,7 @@ def recency_frequency(pages, capacity, window=200):
 
 
 ALGORITHMS = {'FIFO': fifo, 'OPT': opt, 'LRU': lru,
-              'SecondChance': second_chance, 'WindowFreq': recency_frequency, 'WFM': wfm, 'WFM-512': wfm512, 'Adaptive': adaptive, 'LIRS': lirs, 'MemoryOS-heat': memoryos_heat}
+              'SecondChance': second_chance, 'WindowFreq': recency_frequency, 'WFM': wfm, 'WFM-512': wfm512, 'Adaptive': adaptive, 'LIRS': lirs}
 
 
 def main():

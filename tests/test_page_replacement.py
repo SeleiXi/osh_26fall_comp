@@ -9,7 +9,6 @@ from page_replacement import fifo, lru, opt, second_chance, recency_frequency, r
 from wfm_experiment import wfm, wfm512
 from adaptive import adaptive
 from lirs import lirs
-from memoryos_baseline import memoryos_heat
 
 class PagingTests(unittest.TestCase):
     def test_classic_trace(self):
@@ -25,7 +24,7 @@ class PagingTests(unittest.TestCase):
             p = [str(rng.randrange(7)) for _ in range(40)]
             for n in (1, 2, 3, 5):
                 bound = opt(p, n)
-                for algorithm in (fifo, lru, second_chance, recency_frequency, wfm, wfm512, adaptive, lirs, memoryos_heat):
+                for algorithm in (fifo, lru, second_chance, recency_frequency, wfm, wfm512, adaptive, lirs):
                     self.assertLessEqual(bound, algorithm(p, n))
     def test_wfm_cycle(self):
         p = list(map(str, range(1, 8))) * 100
@@ -40,10 +39,6 @@ class PagingTests(unittest.TestCase):
         p = '4 4 4 0 4 1 0 3 4'.split()
         self.assertEqual(lirs(p, 2), 5)
         self.assertEqual(lirs(['a', 'b', 'a'], 1), 3)
-
-    def test_memoryos_heat(self):
-        # Repeated page 1 is hotter than newly inserted page 2.
-        self.assertEqual(memoryos_heat('1 1 2 3 1'.split(), 2), 3)
 
     def test_input(self):
         with tempfile.TemporaryDirectory() as d:
