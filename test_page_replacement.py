@@ -3,6 +3,8 @@ import unittest
 from pathlib import Path
 from page_replacement import fifo, lru, opt, second_chance, recency_frequency, read_trace
 
+from wfm_experiment import wfm
+
 class PagingTests(unittest.TestCase):
     def test_classic_trace(self):
         p = '7 0 1 2 0 3 0 4 2 3 0 3 2'.split()
@@ -19,6 +21,10 @@ class PagingTests(unittest.TestCase):
                 bound = opt(p, n)
                 for algorithm in (fifo, lru, second_chance, recency_frequency):
                     self.assertLessEqual(bound, algorithm(p, n))
+    def test_wfm_cycle(self):
+        p = list(map(str, range(1, 8))) * 100
+        self.assertEqual(wfm(p, 5), 285)
+        self.assertEqual(lru(p, 5), 700)
     def test_input(self):
         with tempfile.TemporaryDirectory() as d:
             p = Path(d) / 'trace.txt'

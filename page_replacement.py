@@ -5,6 +5,7 @@ import heapq
 import sys
 from collections import OrderedDict, deque
 from pathlib import Path
+from wfm_experiment import wfm
 
 FRAMES = (5, 10, 20, 50, 100)
 
@@ -121,7 +122,7 @@ def recency_frequency(pages, capacity, window=200):
 
 
 ALGORITHMS = {'FIFO': fifo, 'OPT': opt, 'LRU': lru,
-              'SecondChance': second_chance, 'WindowFreq': recency_frequency}
+              'SecondChance': second_chance, 'WindowFreq': recency_frequency, 'WFM': wfm}
 
 
 def main():
