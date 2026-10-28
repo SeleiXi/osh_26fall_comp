@@ -1,0 +1,142 @@
+[
+  {
+    "trace": "sort1",
+    "frames": 5,
+    "faults": 475,
+    "opt": 463,
+    "ratio": 1.0259179265658747
+  },
+  {
+    "trace": "sort1",
+    "frames": 10,
+    "faults": 407,
+    "opt": 389,
+    "ratio": 1.0462724935732648
+  },
+  {
+    "trace": "sort1",
+    "frames": 20,
+    "faults": 314,
+    "opt": 274,
+    "ratio": 1.145985401459854
+  },
+  {
+    "trace": "sort1",
+    "frames": 50,
+    "faults": 218,
+    "opt": 192,
+    "ratio": 1.1354166666666667
+  },
+  {
+    "trace": "sort1",
+    "frames": 100,
+    "faults": 192,
+    "opt": 192,
+    "ratio": 1.0
+  },
+  {
+    "trace": "lu",
+    "frames": 5,
+    "faults": 35318,
+    "opt": 34076,
+    "ratio": 1.0364479398990492
+  },
+  {
+    "trace": "lu",
+    "frames": 10,
+    "faults": 32549,
+    "opt": 28722,
+    "ratio": 1.1332428103892487
+  },
+  {
+    "trace": "lu",
+    "frames": 20,
+    "faults": 29789,
+    "opt": 26922,
+    "ratio": 1.1064928311418172
+  },
+  {
+    "trace": "lu",
+    "frames": 50,
+    "faults": 28211,
+    "opt": 21880,
+    "ratio": 1.2893510054844608
+  },
+  {
+    "trace": "lu",
+    "frames": 100,
+    "faults": 24389,
+    "opt": 14869,
+    "ratio": 1.640258255430762
+  },
+  {
+    "trace": "mm16",
+    "frames": 5,
+    "faults": 7464,
+    "opt": 7407,
+    "ratio": 1.0076954232482787
+  },
+  {
+    "trace": "mm16",
+    "frames": 10,
+    "faults": 6367,
+    "opt": 5990,
+    "ratio": 1.0629382303839734
+  },
+  {
+    "trace": "mm16",
+    "frames": 20,
+    "faults": 4344,
+    "opt": 3426,
+    "ratio": 1.2679509632224168
+  },
+  {
+    "trace": "mm16",
+    "frames": 50,
+    "faults": 2985,
+    "opt": 2461,
+    "ratio": 1.2129215765948802
+  },
+  {
+    "trace": "mm16",
+    "frames": 100,
+    "faults": 2140,
+    "opt": 1657,
+    "ratio": 1.2914906457453228
+  },
+  {
+    "trace": "mm32",
+    "frames": 5,
+    "faults": 55131,
+    "opt": 54807,
+    "ratio": 1.0059116536208879
+  },
+  {
+    "trace": "mm32",
+    "frames": 10,
+    "faults": 54120,
+    "opt": 48109,
+    "ratio": 1.1249454364048308
+  },
+  {
+    "trace": "mm32",
+    "frames": 20,
+    "faults": 42247,
+    "opt": 37682,
+    "ratio": 1.1211453744493391
+  },
+  {
+    "trace": "mm32",
+    "frames": 50,
+    "faults": 22036,
+    "opt": 19164,
+    "ratio": 1.1498643289501147
+  },
+  {
+    "trace": "mm32",
+    "frames": 100,
+    "faults": 20484,
+    "opt": 17514,
+    "ratio": 1.169578622816033
+  }
+]
