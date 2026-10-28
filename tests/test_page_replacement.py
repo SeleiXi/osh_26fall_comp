@@ -9,6 +9,7 @@ from page_replacement import fifo, lru, opt, second_chance, recency_frequency, r
 from wfm_experiment import wfm, wfm512
 from adaptive import adaptive
 from lirs import lirs
+from baselines import lfu256, s3fifo_simplified
 
 class PagingTests(unittest.TestCase):
     def test_classic_trace(self):
@@ -39,6 +40,12 @@ class PagingTests(unittest.TestCase):
         p = '4 4 4 0 4 1 0 3 4'.split()
         self.assertEqual(lirs(p, 2), 5)
         self.assertEqual(lirs(['a', 'b', 'a'], 1), 3)
+
+    def test_supplied_baseline_results(self):
+        p = read_trace(Path(__file__).resolve().parents[1] / 'data' / 'sort1.txt')
+        frames = (5, 10, 20, 50, 100)
+        self.assertEqual([lfu256(p, f) for f in frames], [479, 424, 346, 210, 192])
+        self.assertEqual([s3fifo_simplified(p, f) for f in frames], [479, 468, 361, 199, 199])
 
     def test_input(self):
         with tempfile.TemporaryDirectory() as d:
